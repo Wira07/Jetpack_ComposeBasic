@@ -112,7 +112,7 @@ fun JetRewardAppPreview() {
 
 1. Klon repositori:
    ```sh
-   git clone https://github.com/usernameanda/jetreward-app.git
+   https://github.com/Wira07/Jetpack_ComposeBasic/tree/master
    ```
 2. Buka proyek di Android Studio.
 3. Bangun dan jalankan proyek pada emulator atau perangkat fisik.

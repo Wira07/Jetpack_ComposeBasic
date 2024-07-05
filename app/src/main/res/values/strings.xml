@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Jetpack_ComposeBasic</string>
+    <string name="show_less">show_less</string>
+    <string name="show_more">show_more</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_favorite">Favorite</string>
+    <string name="menu_profile">Profile</string>
+    <string name="title_activity_bottom_navigation">BottomNavigation</string>
+    <string name="menu_cart">cart</string>
+</resources>

@@ -19,6 +19,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.wira_fkom.jetpack_composebasic.ui.navigation.NavigationItem
 import com.wira_fkom.jetpack_composebasic.ui.navigation.Screen
@@ -29,7 +30,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Jetpack_ComposeBasicTheme {
-//                MyApp(modifier = Modifier.fillMaxSize())
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -45,13 +45,17 @@ class MainActivity : ComponentActivity() {
 fun JetRewardApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    ) {
+) {
+    // Scaffold provides the basic visual structure, including a BottomBar
+    // Scaffold menyediakan struktur visual dasar, termasuk BottomBar
     Scaffold(
         bottomBar = {
             BottomBar(navController)
         },
         modifier = modifier
     ) { innerPadding ->
+        // NavHost handles navigation between different screens
+        // NavHost menangani navigasi antara layar yang berbeda
         NavHost(
             navController = navController,
             startDestination = Screen.Home.route,
@@ -67,7 +71,9 @@ fun JetRewardApp(
                 ProfileScreen()
             }
         }
-        Content(modifier = Modifier.padding(innerPadding))
+        // CenterContent displays content in the center of the screen
+        // CenterContent menampilkan konten di tengah layar
+        CenterContent(modifier = Modifier.padding(innerPadding))
     }
 }
 
@@ -76,9 +82,15 @@ private fun BottomBar(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+    // NavigationBar is used to display the BottomBar with navigation items
+    // NavigationBar digunakan untuk menampilkan BottomBar dengan item navigasi
     NavigationBar(
         modifier = modifier,
     ) {
+        // List of navigation items
+        // Daftar item navigasi
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = navBackStackEntry?.destination?.route
         val navigationItems = listOf(
             NavigationItem(
                 title = stringResource(R.string.menu_home),
@@ -96,6 +108,8 @@ private fun BottomBar(
                 screen = Screen.Profile
             ),
         )
+        // Adding each navigation item to the BottomBar
+        // Menambahkan setiap item navigasi ke BottomBar
         navigationItems.forEach { item ->
             NavigationBarItem(
                 icon = {
@@ -105,9 +119,10 @@ private fun BottomBar(
                     )
                 },
                 label = { Text(item.title) },
-                selected = false,
+                selected = currentRoute == item.screen.route,
                 onClick = {
                     // Handle navigation item click
+                    // Menangani klik item navigasi
                     navController.navigate(item.screen.route) {
                         popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
@@ -122,21 +137,26 @@ private fun BottomBar(
 }
 
 @Composable
-fun Content(modifier: Modifier = Modifier) {
+fun CenterContent(modifier: Modifier = Modifier) {
+    // Box is used to center the content within the available space
+    // Box digunakan untuk memusatkan konten dalam ruang yang tersedia
     Box(
         modifier = modifier
             .fillMaxSize()
-            .wrapContentSize(Alignment.Center)
-    ){
+            .wrapContentSize(Alignment.TopCenter) // Pusatkan di bagian atas
+            .padding(top = 132.dp) // Margin top 32dp
+    ) {
         Text(
             text = "Hello, Wira Sukma Saputra",
-            modifier = modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp)
         )
     }
 }
 
 @Composable
 fun HomeScreen() {
+    // HomeScreen displays a simple text in the center
+    // HomeScreen menampilkan teks sederhana di tengah
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -148,6 +168,8 @@ fun HomeScreen() {
 
 @Composable
 fun CartScreen() {
+    // CartScreen displays a simple text in the center
+    // CartScreen menampilkan teks sederhana di tengah
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -159,6 +181,8 @@ fun CartScreen() {
 
 @Composable
 fun ProfileScreen() {
+    // ProfileScreen displays a simple text in the center
+    // ProfileScreen menampilkan teks sederhana di tengah
     Box(
         modifier = Modifier
             .fillMaxSize()

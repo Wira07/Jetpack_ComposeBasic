@@ -10,10 +10,16 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.wira_fkom.jetpack_composebasic.ui.navigation.NavigationItem
 import com.wira_fkom.jetpack_composebasic.ui.navigation.Screen
 import com.wira_fkom.jetpack_composebasic.ui.theme.Jetpack_ComposeBasicTheme
@@ -35,23 +41,39 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
 @Composable
 fun JetRewardApp(
     modifier: Modifier = Modifier,
-) {
+    navController: NavHostController = rememberNavController(),
+    ) {
     Scaffold(
         bottomBar = {
-            BottomBar()
+            BottomBar(navController)
         },
         modifier = modifier
     ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = Screen.Home.route,
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable(Screen.Home.route) {
+                HomeScreen()
+            }
+            composable(Screen.Cart.route) {
+                CartScreen()
+            }
+            composable(Screen.Profile.route) {
+                ProfileScreen()
+            }
+        }
         Content(modifier = Modifier.padding(innerPadding))
     }
 }
 
 @Composable
 private fun BottomBar(
+    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     NavigationBar(
@@ -86,6 +108,13 @@ private fun BottomBar(
                 selected = false,
                 onClick = {
                     // Handle navigation item click
+                    navController.navigate(item.screen.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        restoreState = true
+                        launchSingleTop = true
+                    }
                 }
             )
         }
@@ -94,10 +123,49 @@ private fun BottomBar(
 
 @Composable
 fun Content(modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello, Wira Sukma Saputra",
-        modifier = modifier.padding(16.dp)
-    )
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .wrapContentSize(Alignment.Center)
+    ){
+        Text(
+            text = "Hello, Wira Sukma Saputra",
+            modifier = modifier.padding(16.dp)
+        )
+    }
+}
+
+@Composable
+fun HomeScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .wrapContentSize(Alignment.Center)
+    ) {
+        Text(text = "Home Screen")
+    }
+}
+
+@Composable
+fun CartScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .wrapContentSize(Alignment.Center)
+    ) {
+        Text(text = "Cart Screen")
+    }
+}
+
+@Composable
+fun ProfileScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .wrapContentSize(Alignment.Center)
+    ) {
+        Text(text = "Profile Screen")
+    }
 }
 
 @Preview(showBackground = true)
